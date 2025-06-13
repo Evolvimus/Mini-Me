@@ -1,0 +1,20 @@
+{
+    "name": "whatsdepp",
+    "version": "1.0.0",
+    "description": "WhatsApp-ähnliche lokale Chat-App",
+    "main": "server/server.js",
+    "scripts": {
+      "start": "node server/server.js",
+      "dev": "nodemon server/server.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2",
+      "cors": "^2.8.5"
+    },
+    "devDependencies": {
+      "nodemon": "^3.0.1"
+    },
+    "keywords": ["chat", "whatsapp", "nodejs", "express"],
+    "author": "WhatsDepp Developer",
+    "license": "MIT"
+  }

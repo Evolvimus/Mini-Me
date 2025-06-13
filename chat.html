@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsDepp - Chat</title>
+</head>
+<body>
+    <div id="app">
+        <!-- Header mit Nutzerinfo und Logout -->
+        <div id="header" style="border-bottom: 2px solid #ccc; padding: 10px; margin-bottom: 20px;">
+            <h1>🗨️ WhatsDepp</h1>
+            <p>Eingeloggt als: <strong id="currentUserName"></strong></p>
+            <button onclick="logout()">Abmelden</button>
+        </div>
+
+        <!-- Hauptbereich mit Freundesliste und Chat -->
+        <div style="display: flex; gap: 20px;">
+            
+            <!-- Linke Seite: Freunde hinzufügen und Freundesliste -->
+            <div style="width: 300px; border-right: 2px solid #ccc; padding-right: 20px;">
+                
+                <!-- Freund hinzufügen -->
+                <div style="margin-bottom: 20px;">
+                    <h3>Freund hinzufügen</h3>
+                    <form id="addFriendForm">
+                        <input type="text" id="friendUsername" placeholder="Nutzername eingeben..." required>
+                        <button type="submit">Hinzufügen</button>
+                    </form>
+                    <div id="addFriendMessage"></div>
+                </div>
+
+                <!-- Freundesliste -->
+                <div>
+                    <h3>Meine Freunde</h3>
+                    <div id="friendsList">
+                        <p>Laden...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rechte Seite: Chat-Bereich -->
+            <div style="flex: 1;">
+                <div id="chatArea">
+                    <h3>Wähle einen Freund aus, um zu chatten</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

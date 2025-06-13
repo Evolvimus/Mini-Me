@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsDepp - Registrierung</title>
+</head>
+<body>
+    <div id="app">
+        <h1>🗨️ WhatsDepp - Registrierung</h1>
+        
+        <form id="registerForm">
+            <h2>Neuen Account erstellen</h2>
+            
+            <div>
+                <label for="name">Vor- und Nachname:</label><br>
+                <input type="text" id="name" name="name" required placeholder="z.B. Max Mustermann">
+            </div>
+            <br>
+            
+            <div>
+                <label for="username">Nutzername:</label><br>
+                <input type="text" id="username" name="username" required placeholder="z.B. maxi123">
+                <small>Muss eindeutig sein</small>
+            </div>
+            <br>
+            
+            <div>
+                <label for="email">E-Mail:</label><br>
+                <input type="email" id="email" name="email" required placeholder="z.B. max@example.com">
+            </div>
+            <br>
+            
+            <div>
+                <label for="password">Passwort:</label><br>
+                <input type="password" id="password" name="password" required placeholder="Mindestens 4 Zeichen">
+            </div>
+            <br>
+            
+            <div>
+                <label for="confirmPassword">Passwort bestätigen:</label><br>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <br>
+            
+            <button type="submit">Registrieren</button>
+        </form>
+        
+        <br>
+        
+        <div id="message"></div>
+        
+        <br>
+        
+        <p>
+            Bereits ein Account? 
+            <a href="index.html">Hier einloggen</a>
+        </p>
+    </div>
+
+    <script>
+        // Registrierung-Formular Event Listener
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const messageDiv = document.getElementById('message');
+            
+            // Validierung
+            if (!name || !username || !email || !password || !confirmPassword) {
+                messageDiv.innerHTML = '<p style="color: red;">Bitte alle Felder ausfüllen!</p>';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                messageDiv.innerHTML = '<p style="color: red;">Passwörter stimmen nicht überein!</p>';
+                return;
+            }
+            
+            if (password.length < 4) {
+                messageDiv.innerHTML = '<p style="color: red;">Passwort muss mindestens 4 Zeichen lang sein!</p>';
+                return;
+            }
+            
+            if (username.length < 3) {
+                messageDiv.innerHTML = '<p style="color: red;">Nutzername muss mindestens 3 Zeichen lang sein!</p>';
+                return;
+            }
+            
+            // E-Mail-Format prüfen
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                messageDiv.innerHTML = '<p style="color: red;">Bitte gültige E-Mail-Adresse eingeben!</p>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, username, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    messageDiv.innerHTML = '<p style="color: green;">Registrierung erfolgreich! Weiterleitung zur Anmeldung...</p>';
+                    
+                    // Weiterleitung zur Login-Seite nach kurzer Verzögerung
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                } else {
+                    messageDiv.innerHTML = `<p style="color: red;">Fehler: ${data.message}</p>`;
+                }
+            } catch (error) {
+                console.error('Registrierung-Fehler:', error);
+                messageDiv.innerHTML = '<p style="color: red;">Verbindungsfehler. Bitte versuche es erneut.</p>';
+            }
+        });
+
+        // Passwort-Bestätigung live validieren
+        document.getElementById('confirmPassword').addEventListener('input', (e) => {
+            const password = document.getElementById('password').value;
+            const confirmPassword = e.target.value;
+            
+            if (confirmPassword && password !== confirmPassword) {
+                e.target.style.borderColor = 'red';
+            } else {
+                e.target.style.borderColor = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "u1749839680794vi77v4bae",
+    "name": "Nikola Kostic",
+    "username": "nik24",
+    "email": "nikola.24@icloud.com",
+    "password": "MTIzNA==",
+    "friends": [
+      "u17498397468838v14z33am"
+    ]
+  },
+  {
+    "id": "u17498397468838v14z33am",
+    "name": "till",
+    "username": "till",
+    "email": "till@icloud.com",
+    "password": "MTIzNA==",
+    "friends": [
+      "u1749839680794vi77v4bae"
+    ]
+  }
+]

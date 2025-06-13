@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsDepp - Login</title>
+</head>
+<body>
+    <div id="app">
+        <h1>🗨️ WhatsDepp - Login</h1>
+        
+        <form id="loginForm">
+            <h2>Anmelden</h2>
+            
+            <div>
+                <label for="username">Nutzername:</label><br>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <br>
+            
+            <div>
+                <label for="password">Passwort:</label><br>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <br>
+            
+            <button type="submit">Einloggen</button>
+        </form>
+        
+        <br>
+        
+        <div id="message"></div>
+        
+        <br>
+        
+        <p>
+            Noch kein Account? 
+            <a href="register.html">Hier registrieren</a>
+        </p>
+    </div>
+
+    <script>
+        // Prüfen ob bereits eingeloggt beim Laden der Seite
+        window.addEventListener('load', () => {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (currentUser) {
+                // Bereits eingeloggt - zur Chat-Seite weiterleiten
+                window.location.href = 'chat.html';
+            }
+        });
+
+        // Login-Formular Event Listener
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            
+            if (!username || !password) {
+                messageDiv.innerHTML = '<p style="color: red;">Bitte alle Felder ausfüllen!</p>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Login erfolgreich - Nutzer in sessionStorage speichern
+                    sessionStorage.setItem('currentUser', JSON.stringify(data.user));
+                    messageDiv.innerHTML = '<p style="color: green;">Login erfolgreich! Weiterleitung...</p>';
+                    
+                    // Weiterleitung zur Chat-Seite nach kurzer Verzögerung
+                    setTimeout(() => {
+                        window.location.href = 'chat.html';
+                    }, 1000);
+                } else {
+                    messageDiv.innerHTML = `<p style="color: red;">Fehler: ${data.message}</p>`;
+                }
+            } catch (error) {
+                console.error('Login-Fehler:', error);
+                messageDiv.innerHTML = '<p style="color: red;">Verbindungsfehler. Bitte versuche es erneut.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
